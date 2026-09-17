@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Book-recommender">
+  <rect width="64" height="64" rx="14" fill="#101b2d"/>
+  <rect x="14" y="20" width="9" height="30" rx="2" fill="#635bff" transform="rotate(-6 18 35)"/>
+  <rect x="27" y="13" width="10" height="37" rx="2" fill="#f7f8fb"/>
+  <rect x="41" y="25" width="9" height="25" rx="2" fill="#bbf451"/>
+</svg>

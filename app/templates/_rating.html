@@ -1,0 +1,9 @@
+<fieldset class="rating-fieldset">
+  <legend>{{ legend|default('Your rating') }}</legend>
+  <div class="stars">
+    {% for value in range(5, 0, -1) %}
+      <input id="rating-{{ id_prefix }}-{{ value }}" name="rating" value="{{ value }}" type="radio" required {% if current_rating == value %}checked{% endif %}>
+      <label for="rating-{{ id_prefix }}-{{ value }}"><span class="sr-only">{{ value }} stars</span>★</label>
+    {% endfor %}
+  </div>
+</fieldset>

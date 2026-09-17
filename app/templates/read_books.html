@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Read books · Book-recommender{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="kicker">Your reading history</p>
+    <h1>{{ total }} book{% if total != 1 %}s{% endif %} read</h1>
+  </div>
+  <a class="secondary-button" href="/">← Back to homepage</a>
+</section>
+
+<section class="read-list" aria-label="Read books">
+  {% if books %}
+    {% for book in books %}
+    <a class="read-row" href="/books/{{ book.id }}">
+      <span class="mini-cover tone-{{ (book.id % 5) + 1 }}" aria-hidden="true">{{ book.title[0] }}</span>
+      <span class="read-main">
+        <span class="eyebrow">{{ (book.category or 'Uncategorized').split(',')[0] }}</span>
+        <strong>{{ book.title }}</strong>
+        <small>{{ book.authors or 'Unknown author' }}</small>
+      </span>
+      <span class="read-rating" aria-label="Rated {{ book.ratings[0].value }} out of 5">
+        <span aria-hidden="true">{{ '★' * book.ratings[0].value }}{{ '☆' * (5 - book.ratings[0].value) }}</span>
+        <small>{{ book.ratings[0].value }} / 5</small>
+      </span>
+      <span class="row-arrow" aria-hidden="true">→</span>
+    </a>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <strong>No read books yet.</strong>
+      <p>Add your first rating from the home page to begin your shelf.</p>
+      <a class="primary-button" href="/">Browse recommendations</a>
+    </div>
+  {% endif %}
+</section>
+
+{% if pages > 1 %}
+<nav class="pagination" aria-label="Read books pages">
+  {% if page > 1 %}<a href="/read?page={{ page - 1 }}">← Previous</a>{% endif %}
+  <span>Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a href="/read?page={{ page + 1 }}">Next →</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

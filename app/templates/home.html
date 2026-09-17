@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Discover · Book-recommender{% endblock %}
+{% block content %}
+<section class="home-shell">
+  <div class="intro-panel">
+    <div>
+      <p class="kicker">Your next good book</p>
+      <h1>Recommendations shaped by what you actually enjoyed.</h1>
+      <p class="intro-copy">Add a book you’ve read and rate it. Your shelf becomes a taste profile—not an endless questionnaire.</p>
+    </div>
+    <button class="primary-button" type="button" data-open-rating>
+      <span aria-hidden="true">＋</span> Add a read
+    </button>
+  </div>
+  <a class="read-stat" href="/read" aria-label="View all {{ total_read }} read books">
+    <span class="stat-icon" aria-hidden="true">↗</span>
+    <strong data-total-read>{{ total_read }}</strong>
+    <span>books read</span>
+    <small>View your rated shelf</small>
+  </a>
+</section>
+
+{% if saved %}
+<div class="toast" role="status">Rating saved. Your recommendations are refreshed.</div>
+{% endif %}
+
+<section class="recommendation-section" aria-labelledby="recommendations-title">
+  <div class="section-heading">
+    <div>
+      <p class="kicker">{% if personalized %}Based on your ratings{% else %}A place to begin{% endif %}</p>
+      <h2 id="recommendations-title">{% if personalized %}Your recommendations{% else %}Books worth discovering{% endif %}</h2>
+    </div>
+    <p>{% if personalized %}Semantic matches from your weighted reading profile.{% else %}Rate a book 3 stars or higher to personalize this shelf.{% endif %}</p>
+  </div>
+  {% if recommendations %}
+    <div class="book-grid">
+      {% for item in recommendations %}{% include "_book_card.html" %}{% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <strong>The catalog is empty.</strong>
+      <p>Run the dataset ingestion command, then return here.</p>
+    </div>
+  {% endif %}
+</section>
+
+{% endblock %}
+
+{% block dialogs %}
+<dialog class="rating-dialog" id="rating-dialog" aria-labelledby="rating-title">
+  <form method="dialog" class="dialog-close-form"><button aria-label="Close rating dialog">×</button></form>
+  <div class="dialog-heading">
+    <p class="kicker">Add to your shelf</p>
+    <h2 id="rating-title">What did you read?</h2>
+    <p>Search the catalog, choose the exact edition, then add your rating.</p>
+  </div>
+  <form method="post" action="/ratings" id="rating-form">
+    <input type="hidden" name="csrf" value="{{ csrf_token }}">
+    <input type="hidden" name="return_to" value="/">
+    <input type="hidden" name="book_id" id="selected-book-id" required>
+    <label class="field-label" for="book-search">Book title</label>
+    <div class="search-control">
+      <input id="book-search" type="search" placeholder="Try The Hobbit" autocomplete="off" aria-autocomplete="list" aria-controls="book-results" aria-expanded="false">
+      <span aria-hidden="true">⌕</span>
+    </div>
+    <div id="book-results" class="search-results" role="listbox" hidden></div>
+    <div id="selected-book" class="selected-book" hidden></div>
+    {% set id_prefix = 'modal' %}{% set current_rating = 0 %}{% set legend = 'How would you rate it?' %}{% include "_rating.html" %}
+    <p class="form-error" id="rating-error" role="alert" hidden></p>
+    <button class="primary-button full-width" type="submit">Save to read books</button>
+  </form>
+</dialog>
+{% endblock %}

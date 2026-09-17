@@ -1,0 +1,15 @@
+<a class="book-card" href="/books/{{ item.book.id }}">
+  <span class="book-cover tone-{{ (item.book.id % 5) + 1 }}" aria-hidden="true">
+    <span class="cover-rule"></span>
+    <strong>{{ item.book.title[:42] }}</strong>
+    <small>{{ (item.book.authors or 'Unknown author')[:34] }}</small>
+  </span>
+  <span class="book-copy">
+    <span class="eyebrow">{{ (item.book.category or 'Uncategorized').split(',')[0] }}</span>
+    <strong class="book-title">{{ item.book.title }}</strong>
+    <span class="book-author">{{ item.book.authors or 'Unknown author' }}</span>
+    {% if item.score is not none %}
+      <span class="match"><progress max="1" value="{{ item.score }}" aria-label="{{ (item.score * 100)|round(0)|int }} percent taste match"></progress>{{ (item.score * 100)|round(0)|int }}% taste match</span>
+    {% endif %}
+  </span>
+</a>

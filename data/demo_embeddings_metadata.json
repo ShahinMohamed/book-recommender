@@ -1,0 +1,8 @@
+{
+  "model_name": "all-MiniLM-L6-v2",
+  "semantic_fingerprint": "9fa1c4acaad36b8a7a4ee18e9eaa75ca0f55c08f5094c0dfd313a5099205ef23",
+  "number_of_books": 600,
+  "dimensions": 384,
+  "source": "elvinrustam/books-dataset (CC0), deterministic subset",
+  "seed": 7
+}

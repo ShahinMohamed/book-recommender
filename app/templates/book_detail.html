@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} · Book-recommender{% endblock %}
+{% block content %}
+<a class="back-link" href="/">← Back to recommendations</a>
+<article class="detail-layout">
+  <div class="detail-cover tone-{{ (book.id % 5) + 1 }}" aria-hidden="true">
+    <span class="cover-rule"></span>
+    <strong>{{ book.title }}</strong>
+    <small>{{ book.authors or 'Unknown author' }}</small>
+  </div>
+  <div class="detail-content">
+    <p class="kicker">{{ (book.category or 'Uncategorized').split(',')[0] }}</p>
+    <h1>{{ book.title }}</h1>
+    <p class="detail-author">{{ book.authors or 'Unknown author' }}</p>
+    <p class="description">{{ book.description or 'No description is available for this edition.' }}</p>
+    <dl class="metadata-grid">
+      <div><dt>Title</dt><dd>{{ book.title }}</dd></div>
+      <div><dt>Author</dt><dd>{{ book.authors or 'Not listed' }}</dd></div>
+      <div><dt>Genre / category</dt><dd>{{ book.category or 'Not listed' }}</dd></div>
+      <div><dt>Publisher</dt><dd>{{ book.publisher or 'Not listed' }}</dd></div>
+      <div><dt>Starting price</dt><dd>{% if book.price is not none %}${{ '%.2f'|format(book.price) }}{% else %}Not listed{% endif %}</dd></div>
+      <div><dt>Publication date</dt><dd>{{ book.publish_month or '' }} {{ book.publish_year or 'Not listed' }}</dd></div>
+    </dl>
+  </div>
+  <aside class="rating-panel">
+    <p class="kicker">Reading record</p>
+    <h2>{% if rating %}Update your rating{% else %}Have you read it?{% endif %}</h2>
+    <form method="post" action="/ratings">
+      <input type="hidden" name="csrf" value="{{ csrf_token }}">
+      <input type="hidden" name="return_to" value="/books/{{ book.id }}">
+      <input type="hidden" name="book_id" value="{{ book.id }}">
+      {% set id_prefix = 'detail' %}{% set current_rating = rating.value if rating else 0 %}{% set legend = 'Your rating' %}{% include "_rating.html" %}
+      <button class="primary-button full-width" type="submit">{% if rating %}Update rating{% else %}Add to read books{% endif %}</button>
+    </form>
+  </aside>
+</article>
+{% endblock %}
